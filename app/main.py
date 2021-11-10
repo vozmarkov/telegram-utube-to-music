@@ -31,7 +31,6 @@ def is_supported(url):
     return False
 
 
-@run_async
 def download_utube(update, context: CallbackContext):
     url = update.message.text
     if is_supported(url):
@@ -83,7 +82,8 @@ def main():
     dispatcher.add_handler(help_handler)
 
     # youtube download and covert to mp3 handler
-    utubeUrl_handler = MessageHandler(Filters.text, download_utube)
+    utubeUrl_handler = MessageHandler(
+        Filters.text, download_utube, run_async=30)
     dispatcher.add_handler(utubeUrl_handler)
 
     # Add error handler

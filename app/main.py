@@ -8,7 +8,7 @@ from u_manager import download_utube
 def error(update, context: CallbackContext):
     context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text="Something went wrong, please try again later!"
+        text="Something went wrong, please try again!"
     )
 
 

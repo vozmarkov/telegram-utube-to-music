@@ -1,19 +1,8 @@
-from __future__ import unicode_literals
 import logging
 import os
-import youtube_dl
-from telegram.ext.dispatcher import run_async
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext
-
-
-ydl_opts = {
-    'format': 'bestaudio/best',
-    'postprocessors': [{
-        'key': 'FFmpegExtractAudio',
-        'preferredcodec': 'mp3',
-        'preferredquality': '192',
-    }],
-}
+from telegram import ParseMode
+from u_manager import download_utube
 
 
 def error(update, context: CallbackContext):
@@ -23,52 +12,23 @@ def error(update, context: CallbackContext):
     )
 
 
-def is_supported(url):
-    extractors = youtube_dl.extractor.gen_extractors()
-    for e in extractors:
-        if e.suitable(url) and e.IE_NAME != 'generic':
-            return True
-    return False
+def help_command(update, context):
+    update.message.reply_text("This bot was created for a me to use in my friends channel where we all post youtube song we like \n\n"
+                              "so its simple paste url of youtube song and get back mp3\n"
+                              "if song is more than 50mb after converting to mp3 it wont able to send it back to you because of telegram restrictions\n\n"
+                              "you can use it for the same usecase:\n"
+                              "create a channel => add bot to the channel => give bot admin rights => save your youtube music to channel by simple pasting url of youtube\n",
+                              "for any questions/comments/requests feel free to reach out to me at @vozmarkov\n"
+                              "<b>THANKS</b>", parse_mode=ParseMode.HTML)
 
 
-def download_utube(update, context: CallbackContext):
-    url = update.message.text
-    if is_supported(url):
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(url, download=False)
-            raw_filename = ydl.prepare_filename(info)
-            filename = raw_filename.rsplit('.', 1)[0]+".mp3"
-        message = context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            text=f"Download Started: {filename}"
-        )
-        info = ydl.extract_info(url, download=True)
-        context.bot.edit_message_text(
-            chat_id=update.effective_chat.id, message_id=message.message_id, text=f"Convert Started:: {filename}")
-        context.bot.send_audio(
-            chat_id=update.effective_chat.id, audio=open(filename, 'rb'))
-        context.bot.delete_message(
-            chat_id=update.message.chat.id, message_id=message.message_id)
-        context.bot.delete_message(
-            chat_id=update.message.chat.id, message_id=update.message.message_id)
-    try:
-        os.remove(filename)
-    except OSError:
-        pass
-
-
-def help_command(update, context: CallbackContext):
-    context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text="Simple Bot, paste youtube vid url and wait for bot to respond with mp3, in order for bot to delete url message it needs admin permissions"
-    )
-
-
-def start_command(update, context: CallbackContext):
-    context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text="Hello, simple bot created to paste youtube url and it will convert into mp3 and send it back to chat, also will delete the message with url, thanks"
-    )
+def start_command(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text=f"<b>Welcome to a simple bot for saving music from youtube vids</b>\n\n"
+                             "its simple because you dont need to do any bot configs or selects after pasting a youtube url -> get back mp3 in best quality \n\n"
+                             '<b>Simply</b> paste youtube url and it will send back mp3 to you \n'
+                             'Add this bot to your music channel and whenever someone post a youtube vid with a song they want it will send back the mp3\n'
+                             '<b>IF</b> you want the bot to clean up the url message you will have to give the bot admin rights in your channel\n\n'
+                             'You can use the /help for more information .\n', parse_mode=ParseMode.HTML)
 
 
 def main():

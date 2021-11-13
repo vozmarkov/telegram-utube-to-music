@@ -17,8 +17,8 @@ def help_command(update, context):
                               "so its simple paste url of youtube song and get back mp3\n"
                               "if song is more than 50mb after converting to mp3 it wont able to send it back to you because of telegram restrictions\n\n"
                               "you can use it for the same usecase:\n"
-                              "create a channel => add bot to the channel => give bot admin rights => save your youtube music to channel by simple pasting url of youtube\n",
-                              "for any questions/comments/requests feel free to reach out to me at @vozmarkov\n"
+                              "create a channel => add bot to the channel => give bot admin rights => save your youtube music to channel by simple pasting url of youtube\n"
+                              "for any questions/comments/requests feel free to reach out to me at @vozmark\n"
                               "<b>THANKS</b>", parse_mode=ParseMode.HTML)
 
 

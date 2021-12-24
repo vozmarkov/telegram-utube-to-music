@@ -1,6 +1,6 @@
 from tinydb import TinyDB, Query
 from tinydb.operations import increment, set
-db = TinyDB('chats.json')
+db = TinyDB('chats_db.json')
 
 User = Query()
 

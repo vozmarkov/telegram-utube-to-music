@@ -1,6 +1,7 @@
 # from __future__ import unicode_literals
 import os
-import youtube_dl
+# import youtube_dl
+import yt_dlp
 import json
 from telegram.ext import CallbackContext
 from db_manager import log_user
@@ -16,7 +17,7 @@ ydl_opts = {
 
 
 def is_supported(url):
-    extractors = youtube_dl.extractor.gen_extractors()
+    extractors = yt_dlp.extractor.gen_extractors()
     for e in extractors:
         if e.suitable(url) and e.IE_NAME != 'generic':
             return True
@@ -28,13 +29,13 @@ def download_utube(update, context: CallbackContext):
                                                indent=4, sort_keys=True, default=str))
     url = update.message.text
     if is_supported(url):
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
             raw_filename = ydl.prepare_filename(info)
             filename = raw_filename.rsplit('.', 1)[0]+".mp3"
         message = context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text=f"Download Started: {filename}"
+            text=f"Download Started: {raw_filename}"
         )
         info = ydl.extract_info(url, download=True)
         context.bot.edit_message_text(

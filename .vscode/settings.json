@@ -1,0 +1,11 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "user_logs",
+            "database": "${workspaceFolder:telegram-utube-to-music}/user_logs.db"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}

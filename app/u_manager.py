@@ -1,10 +1,9 @@
 # from __future__ import unicode_literals
 import os
-# import youtube_dl
-import yt_dlp
 import json
+import yt_dlp
 from telegram.ext import CallbackContext
-from db_manager import log_user
+from db_manager_sql import log_user
 
 ydl_opts = {
     'format': 'bestaudio/best',
@@ -25,8 +24,8 @@ def is_supported(url):
 
 
 def download_utube(update, context: CallbackContext):
-    log_user(update.effective_chat, json.dumps(update.message.date,
-                                               indent=4, sort_keys=True, default=str))
+    log_user(update.effective_chat, update.message.text, json.dumps(update.message.date,
+                                                                    indent=4, sort_keys=True, default=str))
     url = update.message.text
     if is_supported(url):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:

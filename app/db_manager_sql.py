@@ -60,8 +60,9 @@ def log_user(chat, text, date):
         sqliteConnection = sqlite3.connect('user_logs.db')
         cur = sqliteConnection.cursor()
         print("[log_user]-Connected to SQLite")
-        cur.execute('SELECT * FROM users WHERE id=?', (chat.id,))
+        cur.execute('SELECT * FROM users WHERE chat_id=?', (chat.id,))
         row = cur.fetchone()
+        print("RPW", row)
         if row is None:
             insert_user(chat, text, date)
         else:

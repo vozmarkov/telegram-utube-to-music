@@ -42,7 +42,7 @@ def log_activity(id, text, date):
         cur.execute(
             f"INSERT INTO user_trans_log (userid, message, datecreated) VALUES ({id},'{text}',{date})")
         cur.execute(
-            f'UPDATE users SET actioncount = actioncount + 1 where id in ({id})')
+            f'UPDATE users SET actioncount = actioncount + 1 where chat_id in ({id})')
         print("Record Updated successfully")
         sqliteConnection.commit()
         sqliteConnection.close()

@@ -24,10 +24,10 @@ def is_supported(url):
 
 
 def download_utube(update, context: CallbackContext):
-    log_user(update.effective_chat, update.message.text, json.dumps(update.message.date,
-                                                                    indent=4, sort_keys=True, default=str))
     url = update.message.text
     if is_supported(url):
+        log_user(update.effective_chat, update.message.text, json.dumps(update.message.date,
+                                                                indent=4, sort_keys=True, default=str))
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
             raw_filename = ydl.prepare_filename(info)
@@ -45,7 +45,7 @@ def download_utube(update, context: CallbackContext):
             chat_id=update.message.chat.id, message_id=message.message_id)
         context.bot.delete_message(
             chat_id=update.message.chat.id, message_id=update.message.message_id)
-    try:
-        os.remove(filename)
-    except OSError:
-        pass
+        try:
+            os.remove(filename)
+        except OSError:
+            pass
